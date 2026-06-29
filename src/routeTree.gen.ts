@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ZoneMapRouteImport } from './routes/zone-map'
+import { Route as UnauthorizedRouteImport } from './routes/unauthorized'
 import { Route as TransfersRouteImport } from './routes/transfers'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -28,6 +29,11 @@ import { Route as IndexRouteImport } from './routes/index'
 const ZoneMapRoute = ZoneMapRouteImport.update({
   id: '/zone-map',
   path: '/zone-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnauthorizedRoute = UnauthorizedRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TransfersRoute = TransfersRouteImport.update({
@@ -116,6 +122,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
   '/transfers': typeof TransfersRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/zone-map': typeof ZoneMapRoute
 }
 export interface FileRoutesByTo {
@@ -133,6 +140,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
   '/transfers': typeof TransfersRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/zone-map': typeof ZoneMapRoute
 }
 export interface FileRoutesById {
@@ -151,6 +159,7 @@ export interface FileRoutesById {
   '/profile': typeof ProfileRoute
   '/settings': typeof SettingsRoute
   '/transfers': typeof TransfersRoute
+  '/unauthorized': typeof UnauthorizedRoute
   '/zone-map': typeof ZoneMapRoute
 }
 export interface FileRouteTypes {
@@ -170,6 +179,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/transfers'
+    | '/unauthorized'
     | '/zone-map'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -187,6 +197,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/transfers'
+    | '/unauthorized'
     | '/zone-map'
   id:
     | '__root__'
@@ -204,6 +215,7 @@ export interface FileRouteTypes {
     | '/profile'
     | '/settings'
     | '/transfers'
+    | '/unauthorized'
     | '/zone-map'
   fileRoutesById: FileRoutesById
 }
@@ -222,6 +234,7 @@ export interface RootRouteChildren {
   ProfileRoute: typeof ProfileRoute
   SettingsRoute: typeof SettingsRoute
   TransfersRoute: typeof TransfersRoute
+  UnauthorizedRoute: typeof UnauthorizedRoute
   ZoneMapRoute: typeof ZoneMapRoute
 }
 
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       path: '/zone-map'
       fullPath: '/zone-map'
       preLoaderRoute: typeof ZoneMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/transfers': {
@@ -350,6 +370,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProfileRoute: ProfileRoute,
   SettingsRoute: SettingsRoute,
   TransfersRoute: TransfersRoute,
+  UnauthorizedRoute: UnauthorizedRoute,
   ZoneMapRoute: ZoneMapRoute,
 }
 export const routeTree = rootRouteImport

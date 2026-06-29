@@ -1,56 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  LayoutDashboard,
-  Users,
-  CalendarCheck,
-  CalendarDays,
-  Wallet,
-  ArrowLeftRight,
-  MessageSquareWarning,
-  UserSearch,
-  MapPin,
-  Settings,
-  UserCircle,
-  Building2,
-  ChevronLeft,
-  UserPlus,
-  Landmark,
-} from "lucide-react";
+import { Building2, ChevronLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import { rolePermissions } from "@/lib/mock-data";
+import { hasRole } from "@/lib/permissions";
 import { cn } from "@/lib/utils";
-
-type NavItem = {
-  key: string;
-  label: string;
-  to: string;
-  icon: React.ComponentType<{ className?: string }>;
-  group: "Main" | "Workforce" | "Operations" | "Account";
-};
-
-const NAV: NavItem[] = [
-  { key: "dashboard", label: "Dashboard", to: "/dashboard", icon: LayoutDashboard, group: "Main" },
-  { key: "employees", label: "Employees", to: "/employees", icon: Users, group: "Workforce" },
-  { key: "attendance", label: "Attendance", to: "/attendance", icon: CalendarCheck, group: "Workforce" },
-  { key: "leave", label: "Leave Management", to: "/leave", icon: CalendarDays, group: "Workforce" },
-  { key: "payroll", label: "Payroll", to: "/payroll", icon: Wallet, group: "Workforce" },
-  { key: "transfers", label: "Transfers", to: "/transfers", icon: ArrowLeftRight, group: "Operations" },
-  { key: "grievances", label: "Grievances", to: "/grievances", icon: MessageSquareWarning, group: "Operations" },
-  { key: "employee-360", label: "Employee 360", to: "/employee-360", icon: UserSearch, group: "Operations" },
-  { key: "employee-setup", label: "Employee Setup", to: "/employee-setup", icon: UserPlus, group: "Workforce" },
-  { key: "delhi-workforce", label: "Delhi Workforce", to: "/delhi-workforce", icon: Landmark, group: "Operations" },
-  { key: "zone-map", label: "Zone & Ward Map", to: "/zone-map", icon: MapPin, group: "Operations" },
-  { key: "settings", label: "Settings", to: "/settings", icon: Settings, group: "Account" },
-  { key: "profile", label: "Profile", to: "/profile", icon: UserCircle, group: "Account" },
-];
+import { sidebarGroups, sidebarNavItems } from "@/lib/sidebar-config";
 
 export function AppSidebar({ onNavigate, collapsed, onToggle }: { onNavigate?: () => void; collapsed?: boolean; onToggle?: () => void }) {
   const { user } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const allowed = user ? new Set(rolePermissions[user.role]) : new Set<string>();
-  const items = NAV.filter((i) => allowed.has(i.key));
-
-  const groups: Array<NavItem["group"]> = ["Main", "Workforce", "Operations", "Account"];
+  const items = sidebarNavItems.filter((item) => hasRole(user?.role, item.allowedRoles));
 
   return (
     <aside
@@ -77,7 +35,7 @@ export function AppSidebar({ onNavigate, collapsed, onToggle }: { onNavigate?: (
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
-        {groups.map((g) => {
+        {sidebarGroups.map((g) => {
           const groupItems = items.filter((i) => i.group === g);
           if (!groupItems.length) return null;
           return (

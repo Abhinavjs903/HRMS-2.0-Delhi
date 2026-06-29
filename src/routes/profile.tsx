@@ -34,7 +34,7 @@ function ProfilePage() {
             <Badge variant="secondary" className="mt-2">{user.role}</Badge>
 
             <div className="mt-6 space-y-2.5 text-left">
-              <Row icon={Briefcase} label="Employee ID" value={user.employeeId} />
+              <Row icon={Briefcase} label="Employee ID" value={user.employee_id} />
               <Row icon={Mail} label="Email" value={user.email} />
               <Row icon={Phone} label="Phone" value="+91 98100 12345" />
               <Row icon={MapPin} label="Posting" value={user.department + " · Central"} />

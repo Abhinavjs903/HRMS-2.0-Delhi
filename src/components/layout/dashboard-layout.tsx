@@ -11,8 +11,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu";
 import {
   Popover,
@@ -29,7 +27,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { AppSidebar } from "./app-sidebar";
-import { useAuth, ROLES, type Role } from "@/lib/auth";
+import { useAuth } from "@/lib/auth";
 import { notifications } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
@@ -50,7 +48,7 @@ const ROUTE_LABELS: Record<string, string> = {
 };
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
-  const { user, logout, switchRole, isReady } = useAuth();
+  const { user, logout, isReady } = useAuth();
   const router = useRouter();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const [collapsed, setCollapsed] = useState(false);
@@ -183,13 +181,6 @@ export function DashboardLayout({ children }: { children: ReactNode }) {
                 <DropdownMenuItem asChild>
                   <Link to="/settings"><SettingsIcon className="h-4 w-4 mr-2" /> Settings</Link>
                 </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuLabel className="text-xs text-muted-foreground">Switch role (demo)</DropdownMenuLabel>
-                <DropdownMenuRadioGroup value={user.role} onValueChange={(v) => switchRole(v as Role)}>
-                  {ROLES.map((r) => (
-                    <DropdownMenuRadioItem key={r} value={r} className="text-sm">{r}</DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="text-destructive focus:text-destructive"

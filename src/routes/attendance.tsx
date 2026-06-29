@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { UserCheck, UserX, CalendarOff, Clock, Download, Calendar } from "lucide-react";
-import { todayAttendance, stats } from "@/lib/mock-data";
+import { useAuth } from "@/lib/auth";
+import { todayAttendance, stats, employees } from "@/lib/mock-data";
+import { filterAttendanceForUser } from "@/lib/demo-data-filter";
 
 export const Route = createFileRoute("/attendance")({
   head: () => ({ meta: [{ title: "Attendance — Nagar Setu HRMS" }] }),
@@ -16,10 +18,12 @@ export const Route = createFileRoute("/attendance")({
 });
 
 function AttendancePage() {
-  const present = todayAttendance.filter((a) => a.status === "Present" || a.status === "WFH").length;
-  const late = todayAttendance.filter((a) => a.status === "Late").length;
-  const absent = todayAttendance.filter((a) => a.status === "Absent").length;
-  const leave = todayAttendance.filter((a) => a.status === "On Leave").length;
+  const { user } = useAuth();
+  const visibleAttendance = filterAttendanceForUser(todayAttendance, user, employees);
+  const present = visibleAttendance.filter((a) => a.status === "Present" || a.status === "WFH").length;
+  const late = visibleAttendance.filter((a) => a.status === "Late").length;
+  const absent = visibleAttendance.filter((a) => a.status === "Absent").length;
+  const leave = visibleAttendance.filter((a) => a.status === "On Leave").length;
 
   return (
     <DashboardLayout>
@@ -63,7 +67,7 @@ function AttendancePage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {todayAttendance.map((a) => (
+                  {visibleAttendance.map((a) => (
                     <TableRow key={a.employeeId}>
                       <TableCell>
                         <div className="flex items-center gap-2.5">

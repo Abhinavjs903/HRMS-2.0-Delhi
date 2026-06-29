@@ -7,7 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Wallet, Banknote, TrendingUp, Receipt, Download, Play } from "lucide-react";
-import { payrolls } from "@/lib/mock-data";
+import { useAuth } from "@/lib/auth";
+import { payrolls, employees } from "@/lib/mock-data";
+import { filterPayrollForUser } from "@/lib/demo-data-filter";
 
 export const Route = createFileRoute("/payroll")({
   head: () => ({ meta: [{ title: "Payroll — Nagar Setu HRMS" }] }),
@@ -15,9 +17,11 @@ export const Route = createFileRoute("/payroll")({
 });
 
 function PayrollPage() {
-  const totalGross = payrolls.reduce((s, p) => s + p.basic + p.hra + p.da, 0);
-  const totalNet = payrolls.reduce((s, p) => s + p.net, 0);
-  const totalDed = payrolls.reduce((s, p) => s + p.deductions, 0);
+  const { user } = useAuth();
+  const visiblePayroll = filterPayrollForUser(payrolls, user, employees);
+  const totalGross = visiblePayroll.reduce((s, p) => s + p.basic + p.hra + p.da, 0);
+  const totalNet = visiblePayroll.reduce((s, p) => s + p.net, 0);
+  const totalDed = visiblePayroll.reduce((s, p) => s + p.deductions, 0);
 
   return (
     <DashboardLayout>
@@ -36,7 +40,7 @@ function PayrollPage() {
         <StatCard label="Gross Payroll" value={`₹${(totalGross / 100000).toFixed(2)}L`} icon={Wallet} tone="primary" />
         <StatCard label="Net Disbursed" value={`₹${(totalNet / 100000).toFixed(2)}L`} delta="+4.2%" trend="up" icon={Banknote} tone="success" />
         <StatCard label="Deductions" value={`₹${(totalDed / 100000).toFixed(2)}L`} icon={Receipt} tone="warning" />
-        <StatCard label="Avg. Salary" value={`₹${Math.round(totalNet / payrolls.length).toLocaleString("en-IN")}`} icon={TrendingUp} tone="info" />
+        <StatCard label="Avg. Salary" value={`₹${Math.round(totalNet / Math.max(visiblePayroll.length, 1)).toLocaleString("en-IN")}`} icon={TrendingUp} tone="info" />
       </div>
 
       <Card className="border-border/60">
@@ -59,7 +63,7 @@ function PayrollPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {payrolls.map((p) => (
+              {visiblePayroll.map((p) => (
                 <TableRow key={p.id}>
                   <TableCell>
                     <p className="text-sm font-medium">{p.employee}</p>

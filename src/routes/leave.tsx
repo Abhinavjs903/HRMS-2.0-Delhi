@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarDays, CheckCircle2, XCircle, Clock, Plus, Check, X } from "lucide-react";
-import { leaveRequests } from "@/lib/mock-data";
+import { useAuth } from "@/lib/auth";
+import { leaveRequests, employees } from "@/lib/mock-data";
+import { filterLeaveForUser } from "@/lib/demo-data-filter";
 
 export const Route = createFileRoute("/leave")({
   head: () => ({ meta: [{ title: "Leave Management — Nagar Setu HRMS" }] }),
@@ -16,9 +18,11 @@ export const Route = createFileRoute("/leave")({
 });
 
 function LeavePage() {
-  const pending = leaveRequests.filter((l) => l.status === "Pending").length;
-  const approved = leaveRequests.filter((l) => l.status === "Approved").length;
-  const rejected = leaveRequests.filter((l) => l.status === "Rejected").length;
+  const { user } = useAuth();
+  const visibleLeaveRequests = filterLeaveForUser(leaveRequests, user, employees);
+  const pending = visibleLeaveRequests.filter((l) => l.status === "Pending").length;
+  const approved = visibleLeaveRequests.filter((l) => l.status === "Approved").length;
+  const rejected = visibleLeaveRequests.filter((l) => l.status === "Rejected").length;
 
   return (
     <DashboardLayout>
@@ -32,7 +36,7 @@ function LeavePage() {
         <StatCard label="Pending" value={pending} icon={Clock} tone="warning" />
         <StatCard label="Approved" value={approved} icon={CheckCircle2} tone="success" />
         <StatCard label="Rejected" value={rejected} icon={XCircle} tone="destructive" />
-        <StatCard label="Total Requests" value={leaveRequests.length} icon={CalendarDays} tone="primary" />
+        <StatCard label="Total Requests" value={visibleLeaveRequests.length} icon={CalendarDays} tone="primary" />
       </div>
 
       <Card className="border-border/60">
@@ -61,7 +65,7 @@ function LeavePage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {leaveRequests.map((l) => (
+              {visibleLeaveRequests.map((l) => (
                 <TableRow key={l.id}>
                   <TableCell className="text-xs font-mono text-muted-foreground">{l.id}</TableCell>
                   <TableCell>

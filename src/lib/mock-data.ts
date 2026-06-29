@@ -203,7 +203,7 @@ export const notifications: Notification[] = [
 ];
 
 export const rolePermissions: Record<Role, string[]> = {
-  Admin: ["dashboard", "employees", "attendance", "leave", "payroll", "transfers", "grievances", "employee-360", "employee-setup", "delhi-workforce", "zone-map", "settings", "profile"],
+  Administrator: ["dashboard", "employees", "attendance", "leave", "payroll", "transfers", "grievances", "employee-360", "employee-setup", "delhi-workforce", "zone-map", "settings", "profile"],
   "HR Officer": ["dashboard", "employees", "attendance", "leave", "payroll", "grievances", "employee-360", "employee-setup", "delhi-workforce", "settings", "profile"],
   "Department Head": ["dashboard", "employees", "attendance", "leave", "transfers", "grievances", "employee-360", "delhi-workforce", "zone-map", "profile"],
   Employee: ["dashboard", "attendance", "leave", "payroll", "grievances", "profile"],

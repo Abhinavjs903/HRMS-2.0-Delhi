@@ -1,11 +1,12 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { AuthLayout } from "@/components/layout/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card } from "@/components/ui/card";
-import { useAuth, ROLES, type Role } from "@/lib/auth";
+import { useAuth } from "@/lib/auth";
+import { demoUsers } from "@/lib/demoUsers";
 import { Lock, Mail } from "lucide-react";
 
 export const Route = createFileRoute("/login")({
@@ -15,19 +16,12 @@ export const Route = createFileRoute("/login")({
   component: LoginPage,
 });
 
-const DEMO_EMAIL: Record<Role, string> = {
-  Admin: "admin@mcd.gov.in",
-  "HR Officer": "hr@mcd.gov.in",
-  "Department Head": "head@mcd.gov.in",
-  Employee: "anjali@mcd.gov.in",
-};
-
 function LoginPage() {
   const { login, user, isReady } = useAuth();
   const router = useRouter();
-  const [role, setRole] = useState<Role>("Admin");
-  const [email, setEmail] = useState(DEMO_EMAIL.Admin);
-  const [password, setPassword] = useState("demo1234");
+  const [email, setEmail] = useState("admin@mcd.gov.in");
+  const [password, setPassword] = useState("Admin@123");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (isReady && user) {
@@ -35,14 +29,21 @@ function LoginPage() {
     }
   }, [router, isReady, user]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    login(role);
+    setError("");
+
+    const ok = login(email, password);
+    if (!ok) {
+      setError("Invalid email or password. Please use one of the demo accounts below.");
+    }
   };
 
-  const selectRole = (r: Role) => {
-    setRole(r);
-    setEmail(DEMO_EMAIL[r]);
+  const handleDemoLogin = (demoUser: (typeof demoUsers)[number]) => {
+    setEmail(demoUser.email);
+    setPassword(demoUser.password);
+    setError("");
+    login(demoUser.email, demoUser.password);
   };
 
   return (
@@ -90,31 +91,41 @@ function LoginPage() {
               </div>
             </div>
 
-            <div className="space-y-1.5">
-              <Label>Sign in as</Label>
-              <div className="grid grid-cols-2 gap-2">
-                {ROLES.map((r) => (
-                  <button
-                    type="button"
-                    key={r}
-                    onClick={() => selectRole(r)}
-                    className={`text-xs font-medium rounded-md border px-3 py-2 text-left transition-colors ${
-                      role === r
-                        ? "border-primary bg-primary/5 text-primary"
-                        : "border-border hover:bg-muted text-muted-foreground"
-                    }`}
-                  >
-                    {r}
-                  </button>
-                ))}
-              </div>
-            </div>
+            {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
             <Button type="submit" className="w-full h-10">
               Sign in to Nagar Setu
             </Button>
           </form>
         </Card>
+
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <h3 className="text-sm font-semibold">Demo Accounts</h3>
+            <p className="text-xs text-muted-foreground">Use any account to preview the portal.</p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            {demoUsers.map((demoUser) => (
+              <Card key={demoUser.id} className="p-4 space-y-3">
+                <div className="space-y-1">
+                  <p className="text-sm font-semibold">{demoUser.label}</p>
+                  <p className="text-xs text-muted-foreground">{demoUser.role}</p>
+                </div>
+                <div className="space-y-1 text-xs text-muted-foreground">
+                  <p>
+                    <span className="font-medium text-foreground">Email:</span> {demoUser.email}
+                  </p>
+                  <p>
+                    <span className="font-medium text-foreground">Password:</span> {demoUser.password}
+                  </p>
+                </div>
+                <Button type="button" variant="outline" className="w-full" onClick={() => handleDemoLogin(demoUser)}>
+                  Login as {demoUser.label}
+                </Button>
+              </Card>
+            ))}
+          </div>
+        </div>
 
         <p className="text-xs text-center text-muted-foreground">
           Restricted to authorized MCD personnel. By signing in you agree to the

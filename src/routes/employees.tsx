@@ -11,7 +11,9 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
 import { Plus, Search, Download, Filter, Mail, Phone, MoreHorizontal } from "lucide-react";
+import { useAuth } from "@/lib/auth";
 import { employees, departments } from "@/lib/mock-data";
+import { filterEmployeesForUser } from "@/lib/demo-data-filter";
 
 export const Route = createFileRoute("/employees")({
   head: () => ({ meta: [{ title: "Employees — Nagar Setu HRMS" }] }),
@@ -19,9 +21,11 @@ export const Route = createFileRoute("/employees")({
 });
 
 function EmployeesPage() {
+  const { user } = useAuth();
   const [q, setQ] = useState("");
   const [dept, setDept] = useState("all");
-  const filtered = employees.filter((e) =>
+  const visibleEmployees = filterEmployeesForUser(employees, user);
+  const filtered = visibleEmployees.filter((e) =>
     (dept === "all" || e.department === dept) &&
     (e.name.toLowerCase().includes(q.toLowerCase()) || e.id.toLowerCase().includes(q.toLowerCase()))
   );
@@ -30,7 +34,7 @@ function EmployeesPage() {
     <DashboardLayout>
       <PageHeader
         title="Employees"
-        description={`${employees.length.toLocaleString("en-IN")} employees across ${departments.length} departments`}
+        description={`${visibleEmployees.length.toLocaleString("en-IN")} employees across ${departments.length} departments`}
         actions={
           <>
             <Button variant="outline" size="sm" className="gap-1.5"><Download className="h-4 w-4" /> Export</Button>
@@ -111,7 +115,7 @@ function EmployeesPage() {
             </TableBody>
           </Table>
           <div className="flex items-center justify-between p-4 border-t text-xs text-muted-foreground">
-            <span>Showing {filtered.length} of {employees.length}</span>
+            <span>Showing {filtered.length} of {visibleEmployees.length}</span>
             <div className="flex gap-1">
               <Button variant="outline" size="sm">Previous</Button>
               <Button variant="outline" size="sm">Next</Button>
