@@ -371,17 +371,281 @@ function DashboardPage() {
         </>
       )}
 
-      {(isHrOfficer || isDepartmentHead) && !isAdmin && (
+      {isHrOfficer && (
+        <div className="space-y-6">
+          {/* HR Officer Header with Actions */}
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg font-semibold">Zone Operations Dashboard</h2>
+              <p className="text-sm text-muted-foreground">South Zone · Real-time metrics and management tools</p>
+            </div>
+          </div>
+
+          {/* Zone Stats */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-4">
+            <StatCard label="Zone Employee Count" value={hrZoneEmployeeCount.toLocaleString("en-IN")} hint="Across South Zone" icon={Users} tone="primary" />
+            <StatCard label="Zone Attendance" value={hrZoneAttendance} hint="Today" icon={UserCheck} tone="success" />
+            <StatCard label="Zone Payroll" value={hrZonePayroll} hint="Processed" icon={Wallet} tone="info" />
+            <StatCard label="Zone Grievances" value={hrZoneGrievances} hint="Open cases" icon={MessageSquareWarning} tone="destructive" />
+            <StatCard label="Pending Leaves" value={leaveRequests.filter((l) => l.status === "Pending").length.toString()} hint="Awaiting approval" icon={Calendar} tone="warning" />
+            <StatCard label="Active Transfers" value={transfers.filter((t) => t.status === "Pending" || t.status === "Approved").length.toString()} hint="In progress" icon={ArrowLeftRight} tone="primary" />
+          </div>
+
+          {/* HR Officer Quick Actions */}
+          <Card className="border-border/60">
+            <CardHeader>
+              <CardTitle className="text-base">Quick Actions</CardTitle>
+              <CardDescription>HR management tools and workflows</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                {[
+                  { label: "Review Leaves", icon: Calendar, to: "/leave" },
+                  { label: "Manage Payroll", icon: Wallet, to: "/payroll" },
+                  { label: "Process Transfers", icon: ArrowLeftRight, to: "/transfers" },
+                  { label: "Add Employee", icon: UserPlus, to: "/employee-setup" },
+                  { label: "Review Grievances", icon: MessageSquareWarning, to: "/grievances" },
+                  { label: "Zone Analytics", icon: TrendingUp, to: "/delhi-workforce" },
+                  { label: "Attendance Reports", icon: FileText, to: "/attendance" },
+                  { label: "Employee 360", icon: UserRoundCog, to: "/employee-360" },
+                  { label: "Bulk Operations", icon: ClipboardList, to: "/employees" },
+                  { label: "Settings", icon: ShieldCheck, to: "/settings" },
+                  { label: "Generate Report", icon: Download, to: "/dashboard" },
+                  { label: "More Options", icon: Plus, to: "/dashboard" },
+                ].map((action) => (
+                  <Button key={action.label} asChild variant="outline" className="h-auto flex-col gap-1.5 py-3 px-2 hover:bg-primary/5 hover:border-primary/30 text-center">
+                    <Link to={action.to}>
+                      <action.icon className="h-4 w-4 text-primary" />
+                      <span className="text-xs font-medium leading-tight">{action.label}</span>
+                    </Link>
+                  </Button>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Pending Leave Approvals */}
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <Card className="xl:col-span-2 border-border/60">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <div>
+                  <CardTitle className="text-base">Pending Leave Approvals</CardTitle>
+                  <CardDescription>Awaiting your review</CardDescription>
+                </div>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/leave">Open queue</Link>
+                </Button>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Request</TableHead>
+                        <TableHead className="hidden sm:table-cell">Type</TableHead>
+                        <TableHead className="hidden md:table-cell">Dates</TableHead>
+                        <TableHead>Days</TableHead>
+                        <TableHead>Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {leaveRequests.filter((l) => l.status === "Pending").slice(0, 5).map((l) => (
+                        <TableRow key={l.id}>
+                          <TableCell>
+                            <p className="text-sm font-medium">{l.employee}</p>
+                            <p className="text-[11px] text-muted-foreground">{l.id}</p>
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell text-sm">{l.type}</TableCell>
+                          <TableCell className="hidden md:table-cell text-xs text-muted-foreground font-mono">
+                            {l.from} → {l.to}
+                          </TableCell>
+                          <TableCell className="text-sm font-medium">{l.days}d</TableCell>
+                          <TableCell><StatusBadge status={l.status} /></TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Zone Summary Widget */}
+            <Card className="border-border/60">
+              <CardHeader>
+                <CardTitle className="text-base">Zone Summary</CardTitle>
+                <CardDescription>South Zone overview</CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-muted-foreground">Attendance Rate</span>
+                    <span className="font-semibold text-foreground">94%</span>
+                  </div>
+                  <Progress value={94} className="h-1.5" />
+                </div>
+                <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
+                  <div className="flex items-center justify-between text-sm mb-2">
+                    <span className="text-muted-foreground">Leave Utilization</span>
+                    <span className="font-semibold text-foreground">62%</span>
+                  </div>
+                  <Progress value={62} className="h-1.5" />
+                </div>
+                <div className="rounded-lg border border-border/60 bg-muted/20 p-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-muted-foreground">Grievance Resolution</span>
+                    <span className="font-semibold text-foreground">78%</span>
+                  </div>
+                </div>
+                <Button className="w-full mt-2" asChild>
+                  <Link to="/delhi-workforce">View Detailed Analytics</Link>
+                </Button>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Attendance & Transfers Overview */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <Card className="border-border/60">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <div>
+                  <CardTitle className="text-base">Today's Attendance</CardTitle>
+                  <CardDescription>Zone-wide check-in status</CardDescription>
+                </div>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/attendance">Full report</Link>
+                </Button>
+              </CardHeader>
+              <CardContent className="p-0">
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Employee</TableHead>
+                        <TableHead className="hidden sm:table-cell">Department</TableHead>
+                        <TableHead>Check-in</TableHead>
+                        <TableHead>Status</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {todayAttendance.slice(0, 5).map((a) => (
+                        <TableRow key={a.employeeId}>
+                          <TableCell>
+                            <div className="flex items-center gap-2.5 min-w-0">
+                              <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                                {a.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                              </div>
+                              <div className="min-w-0">
+                                <p className="text-sm font-medium truncate">{a.name}</p>
+                                <p className="text-[11px] text-muted-foreground truncate">{a.employeeId}</p>
+                              </div>
+                            </div>
+                          </TableCell>
+                          <TableCell className="hidden sm:table-cell text-sm text-muted-foreground">{a.department}</TableCell>
+                          <TableCell className="text-sm font-mono">{a.checkIn}</TableCell>
+                          <TableCell><StatusBadge status={a.status} /></TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/60">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <div>
+                  <CardTitle className="text-base">Active Transfers</CardTitle>
+                  <CardDescription>Pending & approved transfers</CardDescription>
+                </div>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/transfers">Manage</Link>
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {transfers.filter((t) => t.status === "Pending" || t.status === "Approved").slice(0, 5).map((transfer) => (
+                  <div key={transfer.id} className="rounded-lg border border-border/60 bg-muted/20 p-3">
+                    <div className="flex items-start justify-between">
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-foreground">{transfer.employee}</p>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          {transfer.fromZone} → {transfer.toZone}
+                        </p>
+                        <p className="text-xs text-muted-foreground">{transfer.reason}</p>
+                      </div>
+                      <StatusBadge status={transfer.status} />
+                    </div>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Grievances & Recent Activity */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+            <Card className="border-border/60">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0">
+                <div>
+                  <CardTitle className="text-base">Zone Grievances</CardTitle>
+                  <CardDescription>Current status summary</CardDescription>
+                </div>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/grievances">View all</Link>
+                </Button>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { label: "Critical", value: "2", tone: "destructive" },
+                    { label: "High", value: "5", tone: "warning" },
+                    { label: "Medium", value: "8", tone: "info" },
+                    { label: "Low", value: "3", tone: "success" },
+                  ].map((item) => (
+                    <div key={item.label} className="rounded-lg border border-border/60 bg-muted/20 p-3">
+                      <p className="text-xs text-muted-foreground">{item.label}</p>
+                      <p className="text-lg font-bold text-foreground mt-1">{item.value}</p>
+                    </div>
+                  ))}
+                </div>
+                <Button className="w-full" variant="outline" asChild>
+                  <Link to="/grievances">Review Grievances</Link>
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/60">
+              <CardHeader>
+                <CardTitle className="text-base">Recent Activity</CardTitle>
+                <CardDescription>Zone-wide system events</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <ol className="space-y-4">
+                  {recentActivity.slice(0, 5).map((a) => (
+                    <li key={a.id} className="flex gap-3">
+                      <div className="flex flex-col items-center shrink-0">
+                        <div className="h-2 w-2 rounded-full bg-primary mt-1.5" />
+                        <div className="w-px flex-1 bg-border mt-1" />
+                      </div>
+                      <div className="min-w-0 pb-1">
+                        <p className="text-sm leading-snug">
+                          <span className="font-medium">{a.who}</span>{" "}
+                          <span className="text-muted-foreground">{a.action}</span>{" "}
+                          <span className="font-medium">{a.target}</span>
+                        </p>
+                        <p className="text-[11px] text-muted-foreground mt-0.5">{a.time}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      )}
+
+      {isDepartmentHead && !isAdmin && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-4">
-            {isHrOfficer ? (
-              <>
-                <StatCard label="Zone Employee Count" value={hrZoneEmployeeCount.toLocaleString("en-IN")} hint="Across South Zone" icon={Users} tone="primary" />
-                <StatCard label="Zone Attendance" value={hrZoneAttendance} hint="Today" icon={UserCheck} tone="success" />
-                <StatCard label="Zone Payroll" value={hrZonePayroll} hint="Processed" icon={Wallet} tone="info" />
-                <StatCard label="Zone Grievances" value={hrZoneGrievances} hint="Open cases" icon={MessageSquareWarning} tone="destructive" />
-              </>
-            ) : (
+            {isDepartmentHead && (
               <>
                 <StatCard label="Department Employee Count" value={departmentEmployees.length.toString()} hint={`In ${currentDepartment}`} icon={Users} tone="primary" />
                 <StatCard label="Department Attendance %" value={`${departmentAttendanceRate}%`} hint="Current shift compliance" icon={UserCheck} tone="success" />
