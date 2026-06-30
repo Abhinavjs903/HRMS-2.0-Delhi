@@ -14,6 +14,8 @@ import {
   Building2,
   UserPlus,
   Landmark,
+  PiggyBank,
+  BrainCircuit,
 } from "lucide-react";
 import type { RoleLike } from "@/lib/permissions";
 
@@ -37,6 +39,8 @@ export const sidebarNavItems: SidebarNavItem[] = [
   { key: "grievances", label: "Grievance", to: "/grievances", icon: MessageSquareWarning, group: "Operations", allowedRoles: ["admin", "hr_officer", "department_head", "employee"] },
   { key: "employee-360", label: "Employee 360", to: "/employee-360", icon: UserSearch, group: "Operations", allowedRoles: ["admin", "hr_officer", "department_head"] },
   { key: "employee-setup", label: "System Configuration", to: "/employee-setup", icon: UserPlus, group: "Workforce", allowedRoles: ["admin"] },
+  { key: "budget-analytics", label: "Budget Analytics", to: "/budget-analytics", icon: PiggyBank, group: "Operations", allowedRoles: ["admin"] },
+  { key: "ml-insights", label: "AI Workforce Intelligence", to: "/ml-insights", icon: BrainCircuit, group: "Operations", allowedRoles: ["admin"] },
   { key: "delhi-workforce", label: "Cross-zone Reports", to: "/delhi-workforce", icon: Landmark, group: "Operations", allowedRoles: ["admin", "department_head"] },
   { key: "zone-map", label: "Zone Hierarchy", to: "/zone-map", icon: MapPin, group: "Operations", allowedRoles: ["admin"] },
   { key: "settings", label: "Settings", to: "/settings", icon: Settings, group: "Account", allowedRoles: ["admin", "hr_officer"] },

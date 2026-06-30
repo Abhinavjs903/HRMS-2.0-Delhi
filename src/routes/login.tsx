@@ -48,15 +48,15 @@ function LoginPage() {
 
   return (
     <AuthLayout>
-      <div className="space-y-6">
-        <div>
+      <div className="flex flex-col gap-4 sm:gap-6">
+        <div className="space-y-1">
           <h2 className="text-2xl font-bold tracking-tight">Welcome back</h2>
-          <p className="text-sm text-muted-foreground mt-1">
+          <p className="text-sm text-muted-foreground">
             Sign in to your Nagar Setu account to continue.
           </p>
         </div>
 
-        <Card className="p-6 shadow-sm border-border/60">
+        <Card className="p-5 shadow-sm border-border/60 sm:p-6">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="email">Official email</Label>
@@ -74,7 +74,7 @@ function LoginPage() {
             </div>
 
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-2">
                 <Label htmlFor="password">Password</Label>
                 <a className="text-xs text-primary hover:underline" href="#">Forgot?</a>
               </div>
@@ -93,33 +93,33 @@ function LoginPage() {
 
             {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
-            <Button type="submit" className="w-full h-10">
+            <Button type="submit" className="h-11 w-full">
               Sign in to Nagar Setu
             </Button>
           </form>
         </Card>
 
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <h3 className="text-sm font-semibold">Demo Accounts</h3>
             <p className="text-xs text-muted-foreground">Use any account to preview the portal.</p>
           </div>
           <div className="grid gap-3 md:grid-cols-2">
             {demoUsers.map((demoUser) => (
-              <Card key={demoUser.id} className="p-4 space-y-3">
+              <Card key={demoUser.id} className="flex h-full flex-col p-4">
                 <div className="space-y-1">
                   <p className="text-sm font-semibold">{demoUser.label}</p>
                   <p className="text-xs text-muted-foreground">{demoUser.role}</p>
                 </div>
-                <div className="space-y-1 text-xs text-muted-foreground">
-                  <p>
+                <div className="mt-3 space-y-1 text-xs text-muted-foreground">
+                  <p className="break-all">
                     <span className="font-medium text-foreground">Email:</span> {demoUser.email}
                   </p>
-                  <p>
+                  <p className="break-all">
                     <span className="font-medium text-foreground">Password:</span> {demoUser.password}
                   </p>
                 </div>
-                <Button type="button" variant="outline" className="w-full" onClick={() => handleDemoLogin(demoUser)}>
+                <Button type="button" variant="outline" className="mt-4 h-10 w-full" onClick={() => handleDemoLogin(demoUser)}>
                   Login as {demoUser.label}
                 </Button>
               </Card>

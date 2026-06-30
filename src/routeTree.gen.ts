@@ -23,6 +23,8 @@ import { Route as EmployeeSetupRouteImport } from './routes/employee-setup'
 import { Route as Employee360RouteImport } from './routes/employee-360'
 import { Route as DelhiWorkforceRouteImport } from './routes/delhi-workforce'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as BudgetAnalyticsRouteImport } from './routes/budget-analytics'
+import { Route as MlInsightsRouteImport } from './routes/ml-insights'
 import { Route as AttendanceRouteImport } from './routes/attendance'
 import { Route as IndexRouteImport } from './routes/index'
 
@@ -96,6 +98,16 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BudgetAnalyticsRoute = BudgetAnalyticsRouteImport.update({
+  id: '/budget-analytics',
+  path: '/budget-analytics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MlInsightsRoute = MlInsightsRouteImport.update({
+  id: '/ml-insights',
+  path: '/ml-insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AttendanceRoute = AttendanceRouteImport.update({
   id: '/attendance',
   path: '/attendance',
@@ -110,7 +122,9 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceRoute
+  '/budget-analytics': typeof BudgetAnalyticsRoute
   '/dashboard': typeof DashboardRoute
+  '/ml-insights': typeof MlInsightsRoute
   '/delhi-workforce': typeof DelhiWorkforceRoute
   '/employee-360': typeof Employee360Route
   '/employee-setup': typeof EmployeeSetupRoute
@@ -128,7 +142,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceRoute
+  '/budget-analytics': typeof BudgetAnalyticsRoute
   '/dashboard': typeof DashboardRoute
+  '/ml-insights': typeof MlInsightsRoute
   '/delhi-workforce': typeof DelhiWorkforceRoute
   '/employee-360': typeof Employee360Route
   '/employee-setup': typeof EmployeeSetupRoute
@@ -147,7 +163,9 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/attendance': typeof AttendanceRoute
+  '/budget-analytics': typeof BudgetAnalyticsRoute
   '/dashboard': typeof DashboardRoute
+  '/ml-insights': typeof MlInsightsRoute
   '/delhi-workforce': typeof DelhiWorkforceRoute
   '/employee-360': typeof Employee360Route
   '/employee-setup': typeof EmployeeSetupRoute
@@ -167,7 +185,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/attendance'
+    | '/budget-analytics'
     | '/dashboard'
+    | '/ml-insights'
     | '/delhi-workforce'
     | '/employee-360'
     | '/employee-setup'
@@ -185,7 +205,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/attendance'
+    | '/budget-analytics'
     | '/dashboard'
+    | '/ml-insights'
     | '/delhi-workforce'
     | '/employee-360'
     | '/employee-setup'
@@ -203,7 +225,9 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/attendance'
+    | '/budget-analytics'
     | '/dashboard'
+    | '/ml-insights'
     | '/delhi-workforce'
     | '/employee-360'
     | '/employee-setup'
@@ -222,6 +246,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AttendanceRoute: typeof AttendanceRoute
+  BudgetAnalyticsRoute: typeof BudgetAnalyticsRoute
   DashboardRoute: typeof DashboardRoute
   DelhiWorkforceRoute: typeof DelhiWorkforceRoute
   Employee360Route: typeof Employee360Route
@@ -338,6 +363,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ml-insights': {
+      id: '/ml-insights'
+      path: '/ml-insights'
+      fullPath: '/ml-insights'
+      preLoaderRoute: typeof MlInsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/budget-analytics': {
+      id: '/budget-analytics'
+      path: '/budget-analytics'
+      fullPath: '/budget-analytics'
+      preLoaderRoute: typeof BudgetAnalyticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/attendance': {
       id: '/attendance'
       path: '/attendance'
@@ -358,7 +397,9 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AttendanceRoute: AttendanceRoute,
+  BudgetAnalyticsRoute: BudgetAnalyticsRoute,
   DashboardRoute: DashboardRoute,
+  MlInsightsRoute: MlInsightsRoute,
   DelhiWorkforceRoute: DelhiWorkforceRoute,
   Employee360Route: Employee360Route,
   EmployeeSetupRoute: EmployeeSetupRoute,

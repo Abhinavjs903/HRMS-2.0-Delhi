@@ -23,9 +23,11 @@ export const departments = [
   "Horticulture",
   "Revenue",
   "Human Resources",
+  "Transport",
+  "Fire Services",
 ];
 
-export const zones = ["North", "South", "East", "West", "Central", "Najafgarh", "Najafgarh", "Shahdara North", "Shahdara South", "Rohini", "Civil Lines", "Karol Bagh"];
+export const zones = ["North", "South", "East", "West", "Central", "Najafgarh", "Shahdara North", "Shahdara South", "Rohini", "Civil Lines", "Karol Bagh", "Dwarka", "Paharganj"];
 
 export const employees: Employee[] = [
   { id: "MCD-ADM-001", name: "Rajesh Kumar", email: "rajesh.kumar@mcd.gov.in", phone: "+91 98100 12345", department: "Administration", designation: "System Administrator", zone: "Central", ward: "Ward 42", joinDate: "2012-03-15", status: "Active" },
@@ -40,6 +42,14 @@ export const employees: Employee[] = [
   { id: "MCD-PH-074", name: "Deepa Iyer", email: "deepa.iyer@mcd.gov.in", phone: "+91 98101 01234", department: "Public Health", designation: "Health Inspector", zone: "Najafgarh", ward: "Ward 55", joinDate: "2013-12-01", status: "Transferred" },
   { id: "MCD-ENG-112", name: "Sanjay Mehta", email: "sanjay.mehta@mcd.gov.in", phone: "+91 98101 11223", department: "Engineering", designation: "Executive Engineer", zone: "Karol Bagh", ward: "Ward 22", joinDate: "2009-05-18", status: "Active" },
   { id: "MCD-ADM-099", name: "Neha Gupta", email: "neha.gupta@mcd.gov.in", phone: "+91 98101 33445", department: "Administration", designation: "Section Officer", zone: "Civil Lines", ward: "Ward 3", joinDate: "2018-10-22", status: "Active" },
+  { id: "MCD-TR-001", name: "Suresh Bhatia", email: "suresh.bhatia@mcd.gov.in", phone: "+91 98110 22222", department: "Transport", designation: "Fleet Supervisor", zone: "Dwarka", ward: "Ward 41", joinDate: "2016-09-10", status: "Active" },
+  { id: "MCD-FS-002", name: "Meera Kapoor", email: "meera.kapoor@mcd.gov.in", phone: "+91 98110 33333", department: "Fire Services", designation: "Station Officer", zone: "Paharganj", ward: "Ward 29", joinDate: "2014-01-18", status: "Active" },
+  { id: "MCD-PH-003", name: "Nitin Arora", email: "nitin.arora@mcd.gov.in", phone: "+91 98110 44444", department: "Public Health", designation: "Senior Sanitarian", zone: "South", ward: "Ward 66", joinDate: "2018-08-21", status: "Active" },
+  { id: "MCD-SN-202", name: "Preeti Singh", email: "preeti.singh@mcd.gov.in", phone: "+91 98110 55555", department: "Sanitation", designation: "Ward Inspector", zone: "East", ward: "Ward 14", joinDate: "2021-02-12", status: "On Leave" },
+  { id: "MCD-ENG-113", name: "Harish Chadha", email: "harish.chadha@mcd.gov.in", phone: "+91 98110 66666", department: "Engineering", designation: "Junior Engineer", zone: "North", ward: "Ward 27", joinDate: "2022-03-01", status: "Active" },
+  { id: "MCD-EDU-023", name: "Pooja Malik", email: "pooja.malik@mcd.gov.in", phone: "+91 98110 77777", department: "Education", designation: "Vice Principal", zone: "Central", ward: "Ward 31", joinDate: "2017-11-05", status: "Active" },
+  { id: "MCD-HRT-009", name: "Ishaan Bedi", email: "ishaan.bedi@mcd.gov.in", phone: "+91 98110 88888", department: "Horticulture", designation: "Landscape Officer", zone: "Rohini", ward: "Ward 19", joinDate: "2020-06-16", status: "Active" },
+  { id: "MCD-REV-067", name: "Parul Sethi", email: "parul.sethi@mcd.gov.in", phone: "+91 98110 99999", department: "Revenue", designation: "Assistant Revenue Officer", zone: "West", ward: "Ward 92", joinDate: "2019-04-09", status: "Active" },
 ];
 
 export const stats = {
@@ -57,6 +67,7 @@ export type LeaveRequest = {
   id: string;
   employee: string;
   employeeId: string;
+  department: string;
   type: "Casual" | "Sick" | "Earned" | "Maternity" | "Compensatory";
   from: string;
   to: string;
@@ -66,12 +77,15 @@ export type LeaveRequest = {
 };
 
 export const leaveRequests: LeaveRequest[] = [
-  { id: "LV-1042", employee: "Anjali Verma", employeeId: "MCD-SN-128", type: "Casual", from: "2026-07-02", to: "2026-07-03", days: 2, reason: "Personal work", status: "Pending" },
-  { id: "LV-1041", employee: "Amit Patel", employeeId: "MCD-ENG-045", type: "Sick", from: "2026-06-28", to: "2026-06-30", days: 3, reason: "Fever", status: "Pending" },
-  { id: "LV-1040", employee: "Sunita Rao", employeeId: "MCD-EDU-022", type: "Earned", from: "2026-06-25", to: "2026-07-05", days: 10, reason: "Family function", status: "Approved" },
-  { id: "LV-1039", employee: "Mohit Khanna", employeeId: "MCD-HRT-008", type: "Casual", from: "2026-06-29", to: "2026-06-29", days: 1, reason: "Bank work", status: "Pending" },
-  { id: "LV-1038", employee: "Kavita Nair", employeeId: "MCD-REV-066", type: "Earned", from: "2026-07-10", to: "2026-07-14", days: 5, reason: "Vacation", status: "Pending" },
-  { id: "LV-1037", employee: "Ravi Joshi", employeeId: "MCD-SN-201", type: "Sick", from: "2026-06-24", to: "2026-06-26", days: 3, reason: "Flu", status: "Rejected" },
+  { id: "LV-1042", employee: "Anjali Verma", employeeId: "MCD-SN-128", department: "Sanitation", type: "Casual", from: "2026-07-02", to: "2026-07-03", days: 2, reason: "Personal work", status: "Pending" },
+  { id: "LV-1041", employee: "Amit Patel", employeeId: "MCD-ENG-045", department: "Engineering", type: "Sick", from: "2026-06-28", to: "2026-06-30", days: 3, reason: "Fever", status: "Pending" },
+  { id: "LV-1040", employee: "Sunita Rao", employeeId: "MCD-EDU-022", department: "Education", type: "Earned", from: "2026-06-25", to: "2026-07-05", days: 10, reason: "Family function", status: "Approved" },
+  { id: "LV-1039", employee: "Mohit Khanna", employeeId: "MCD-HRT-008", department: "Horticulture", type: "Casual", from: "2026-06-29", to: "2026-06-29", days: 1, reason: "Bank work", status: "Pending" },
+  { id: "LV-1038", employee: "Kavita Nair", employeeId: "MCD-REV-066", department: "Revenue", type: "Earned", from: "2026-07-10", to: "2026-07-14", days: 5, reason: "Vacation", status: "Pending" },
+  { id: "LV-1037", employee: "Ravi Joshi", employeeId: "MCD-SN-201", department: "Sanitation", type: "Sick", from: "2026-06-24", to: "2026-06-26", days: 3, reason: "Flu", status: "Rejected" },
+  { id: "LV-1036", employee: "Preeti Singh", employeeId: "MCD-SN-202", department: "Sanitation", type: "Casual", from: "2026-07-12", to: "2026-07-13", days: 2, reason: "Family function", status: "Pending" },
+  { id: "LV-1035", employee: "Meera Kapoor", employeeId: "MCD-FS-002", department: "Fire Services", type: "Earned", from: "2026-07-08", to: "2026-07-12", days: 5, reason: "Personal work", status: "Approved" },
+  { id: "LV-1034", employee: "Nitin Arora", employeeId: "MCD-PH-003", department: "Public Health", type: "Sick", from: "2026-07-15", to: "2026-07-16", days: 2, reason: "Medical checkup", status: "Pending" },
 ];
 
 export type Activity = {
@@ -148,6 +162,7 @@ export type Grievance = {
   id: string;
   title: string;
   filedBy: string;
+  department: string;
   category: "Workplace" | "Salary" | "Harassment" | "Facilities" | "Other";
   zone: string;
   ward: string;
@@ -157,12 +172,14 @@ export type Grievance = {
 };
 
 export const grievances: Grievance[] = [
-  { id: "G-2287", title: "Pending sanitation payment dispute", filedBy: "Citizen — Anonymous", category: "Salary", zone: "West", ward: "Ward 33", raisedOn: "2026-06-27", priority: "High", status: "Open" },
-  { id: "G-2286", title: "Office AC non-functional", filedBy: "Sanjay Mehta", category: "Facilities", zone: "Karol Bagh", ward: "Ward 22", raisedOn: "2026-06-26", priority: "Medium", status: "In Review" },
-  { id: "G-2285", title: "Unfair leave rejection", filedBy: "Ravi Joshi", category: "Workplace", zone: "Shahdara North", ward: "Ward 7", raisedOn: "2026-06-25", priority: "Medium", status: "Escalated" },
-  { id: "G-2284", title: "Delay in pension processing", filedBy: "Retired Employee", category: "Salary", zone: "Central", ward: "Ward 12", raisedOn: "2026-06-24", priority: "High", status: "In Review" },
-  { id: "G-2283", title: "Workplace harassment report", filedBy: "Anonymous", category: "Harassment", zone: "South", ward: "Ward 88", raisedOn: "2026-06-22", priority: "Critical", status: "Open" },
-  { id: "G-2282", title: "Broken washroom plumbing", filedBy: "Mohit Khanna", category: "Facilities", zone: "Rohini", ward: "Ward 18", raisedOn: "2026-06-20", priority: "Low", status: "Resolved" },
+  { id: "G-2287", title: "Pending sanitation payment dispute", filedBy: "Citizen — Anonymous", department: "Sanitation", category: "Salary", zone: "West", ward: "Ward 33", raisedOn: "2026-06-27", priority: "High", status: "Open" },
+  { id: "G-2286", title: "Office AC non-functional", filedBy: "Sanjay Mehta", department: "Engineering", category: "Facilities", zone: "Karol Bagh", ward: "Ward 22", raisedOn: "2026-06-26", priority: "Medium", status: "In Review" },
+  { id: "G-2285", title: "Unfair leave rejection", filedBy: "Ravi Joshi", department: "Sanitation", category: "Workplace", zone: "Shahdara North", ward: "Ward 7", raisedOn: "2026-06-25", priority: "Medium", status: "Escalated" },
+  { id: "G-2284", title: "Delay in pension processing", filedBy: "Retired Employee", department: "Administration", category: "Salary", zone: "Central", ward: "Ward 12", raisedOn: "2026-06-24", priority: "High", status: "In Review" },
+  { id: "G-2283", title: "Workplace harassment report", filedBy: "Anonymous", department: "Sanitation", category: "Harassment", zone: "South", ward: "Ward 88", raisedOn: "2026-06-22", priority: "Critical", status: "Open" },
+  { id: "G-2282", title: "Broken washroom plumbing", filedBy: "Mohit Khanna", department: "Horticulture", category: "Facilities", zone: "Rohini", ward: "Ward 18", raisedOn: "2026-06-20", priority: "Low", status: "Resolved" },
+  { id: "G-2281", title: "Late field attendance compliance", filedBy: "Meera Kapoor", department: "Fire Services", category: "Workplace", zone: "Paharganj", ward: "Ward 29", raisedOn: "2026-06-21", priority: "Medium", status: "Open" },
+  { id: "G-2280", title: "Vehicle scheduling issue", filedBy: "Suresh Bhatia", department: "Transport", category: "Facilities", zone: "Dwarka", ward: "Ward 41", raisedOn: "2026-06-19", priority: "Low", status: "Resolved" },
 ];
 
 export type AttendanceRow = {
@@ -184,6 +201,10 @@ export const todayAttendance: AttendanceRow[] = [
   { employeeId: "MCD-EDU-022", name: "Sunita Rao", department: "Education", checkIn: "—", checkOut: "—", status: "Absent", hours: "—" },
   { employeeId: "MCD-HRT-008", name: "Mohit Khanna", department: "Horticulture", checkIn: "08:45", checkOut: "—", status: "Present", hours: "8h 29m" },
   { employeeId: "MCD-REV-066", name: "Kavita Nair", department: "Revenue", checkIn: "09:15", checkOut: "—", status: "WFH", hours: "8h 00m" },
+  { employeeId: "MCD-SN-201", name: "Ravi Joshi", department: "Sanitation", checkIn: "08:52", checkOut: "—", status: "Present", hours: "8h 18m" },
+  { employeeId: "MCD-SN-202", name: "Preeti Singh", department: "Sanitation", checkIn: "—", checkOut: "—", status: "On Leave", hours: "—" },
+  { employeeId: "MCD-TR-001", name: "Suresh Bhatia", department: "Transport", checkIn: "09:05", checkOut: "—", status: "Present", hours: "8h 10m" },
+  { employeeId: "MCD-FS-002", name: "Meera Kapoor", department: "Fire Services", checkIn: "08:48", checkOut: "—", status: "Present", hours: "8h 25m" },
 ];
 
 export type Notification = {

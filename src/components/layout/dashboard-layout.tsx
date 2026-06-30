@@ -45,6 +45,8 @@ const ROUTE_LABELS: Record<string, string> = {
   "zone-map": "Zone & Ward Map",
   settings: "Settings",
   profile: "Profile",
+  "budget-analytics": "Budget & Expenditure Analytics",
+  "ml-insights": "AI Workforce Intelligence",
 };
 
 export function DashboardLayout({ children }: { children: ReactNode }) {
