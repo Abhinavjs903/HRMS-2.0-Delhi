@@ -1,9 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Building2, ChevronLeft } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { hasRole } from "@/lib/permissions";
 import { cn } from "@/lib/utils";
 import { sidebarGroups, sidebarNavItems } from "@/lib/sidebar-config";
+import { NagarSetuLogo } from "@/components/widgets/logo";
 
 export function AppSidebar({ onNavigate, collapsed, onToggle }: { onNavigate?: () => void; collapsed?: boolean; onToggle?: () => void }) {
   const { user } = useAuth();
@@ -18,19 +19,21 @@ export function AppSidebar({ onNavigate, collapsed, onToggle }: { onNavigate?: (
       )}
     >
       <div className="flex items-center gap-2 px-4 h-16 border-b border-sidebar-border shrink-0">
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-          <Building2 className="h-5 w-5" />
-        </div>
-        {!collapsed && (
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold tracking-tight truncate">Nagar Setu</p>
-            <p className="text-[11px] text-sidebar-foreground/60 truncate">MCD · HRMS Portal</p>
-          </div>
-        )}
-        {!collapsed && onToggle && (
-          <button onClick={onToggle} className="hidden lg:grid place-items-center h-7 w-7 rounded-md hover:bg-sidebar-accent">
-            <ChevronLeft className="h-4 w-4" />
-          </button>
+        {collapsed ? (
+          <NagarSetuLogo size={32} />
+        ) : (
+          <>
+            <NagarSetuLogo size={40} />
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-bold tracking-tight truncate">Nagar Setu</p>
+              <p className="text-[10px] text-sidebar-foreground/60 truncate">MCD · HRMS</p>
+            </div>
+            {onToggle && (
+              <button onClick={onToggle} className="hidden lg:grid place-items-center h-7 w-7 rounded-md hover:bg-sidebar-accent">
+                <ChevronLeft className="h-4 w-4" />
+              </button>
+            )}
+          </>
         )}
       </div>
 

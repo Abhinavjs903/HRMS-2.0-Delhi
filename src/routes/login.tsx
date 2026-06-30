@@ -8,6 +8,7 @@ import { Card } from "@/components/ui/card";
 import { useAuth } from "@/lib/auth";
 import { demoUsers } from "@/lib/demoUsers";
 import { Lock, Mail } from "lucide-react";
+import { NagarSetuLogoLarge } from "@/components/widgets/logo";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -49,10 +50,15 @@ function LoginPage() {
   return (
     <AuthLayout>
       <div className="flex flex-col gap-4 sm:gap-6">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-bold tracking-tight">Welcome back</h2>
+        {/* Official Logo */}
+        <div className="flex justify-center mb-2">
+          <NagarSetuLogoLarge />
+        </div>
+
+        <div className="space-y-1 text-center">
+          <h2 className="text-2xl font-bold tracking-tight">Welcome to Nagar Setu</h2>
           <p className="text-sm text-muted-foreground">
-            Sign in to your Nagar Setu account to continue.
+            MCD HRMS Portal — Sign in to access your account.
           </p>
         </div>
 
